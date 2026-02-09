@@ -31,3 +31,19 @@ results['Percentage_Decile_1'] = (results['Total_In_Decile_1']/results['Total_LS
 #Output with additional column for percentages
 print(results)
 
+#results.to_excel('IMD_2019_Decile1.xlsx', index = False)
+
+#Counting number of LSOAs with an IMD Decile 1, 2, or 3, grouped by Local Authority District
+decile123 = df[df['Index of Multiple Deprivation (IMD) Decile'] <= 3].groupby('Local Authority District name (2019)').size()
+
+#Calculating percentage
+results['Total_In_Deciles_123'] = results['Local Authority District name (2019)'].map(decile123).fillna(0)
+
+results['Percentage_Deciles_123'] = (results['Total_In_Deciles_123']/results['Total_LSOAs']) * 100
+
+#Output to Excel file
+results.to_excel('IMD_2019_Decile123.xlsx', index = False)
+
+#Generating summary statistics
+df2 = pd.read_excel('IMD_2019_Decile123.xlsx')
+print(df2['Percentage_Deciles_123'].describe())
